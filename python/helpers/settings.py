@@ -282,8 +282,8 @@ def get_settings() -> Settings:
 def set_settings(settings: Settings):
     global _settings
     _settings = normalize_settings(settings)
-    _apply_settings()
     _write_settings_file(_settings)
+    _apply_settings()
 
 
 def normalize_settings(settings: Settings) -> Settings:

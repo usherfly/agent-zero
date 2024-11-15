@@ -186,7 +186,7 @@ def get_openai_chat(
     return ChatOpenAI(model_name=model_name, temperature=temperature, api_key=api_key, **kwargs)  # type: ignore
 
 
-def get_openai_embedding(model_name: str, api_key=get_api_key("openai"), **kwargs):
+def get_openai_embedding(model_name: str, api_key=None, **kwargs):
     if not api_key:
         api_key = get_api_key("openai")
     return OpenAIEmbeddings(model=model_name, api_key=api_key, **kwargs)  # type: ignore
