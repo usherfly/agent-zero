@@ -17,6 +17,9 @@ def get_dotenv_value(key: str):
 
 def save_dotenv_value(key: str, value: str):
     dotenv_path = get_dotenv_file_path()
+    if not os.path.isfile(dotenv_path):
+        with open(dotenv_path, "w") as f:
+            f.write("")
     with open(dotenv_path, "r+") as f:
         lines = f.readlines()
         found = False
