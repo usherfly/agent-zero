@@ -559,12 +559,6 @@ async def set_settings():
 def run():
     print("Initializing framework...")
 
-    # load env vars
-    load_dotenv()
-
-    # initialize contexts from persisted chats
-    persist_chat.load_tmp_chats()
-
     # Suppress only request logs but keep the startup messages
     from werkzeug.serving import WSGIRequestHandler
 
@@ -596,6 +590,9 @@ def run():
         except Exception as e:
             print(f"Failed to start Cloudflare tunnel: {e}")
             print("Continuing without tunnel...")
+
+    # initialize contexts from persisted chats
+    persist_chat.load_tmp_chats()
 
     try:
         # Run Flask app
