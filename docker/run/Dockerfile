@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y \
 RUN rm -rf /var/lib/apt/lists/*
 
 # Clone Agent Zero repository
-RUN git clone --branch development https://github.com/frdel/agent-zero.git /git/agent-zero
+RUN git clone --branch work-in-progress https://github.com/frdel/agent-zero.git /git/agent-zero
 
 # Set up SSH
 RUN mkdir /var/run/sshd && \
