@@ -72,7 +72,7 @@ def initialize():
         if hasattr(config, key):
             # conversion based on type of config[key]
             if isinstance(getattr(config, key), bool):
-                value = bool(value)
+                value = value.lower().strip() == "true"
                 print("bool",value)
             elif isinstance(getattr(config, key), int):
                 value = int(value)
