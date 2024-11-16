@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Copy all contents from /fs to root directory (/) without overwriting
-cp -rn --no-preserve=ownership,mode /fs/* /
+cp -r --no-preserve=ownership,mode /fs/* /
 
 # allow execution of /root/.bashrc and /root/.profile
 chmod 444 /root/.bashrc
