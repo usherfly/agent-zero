@@ -49,15 +49,16 @@ class DockerContainerManager:
         containers = self.client.containers.list(all=True, filters={"ancestor": self.image})
         infos = []
         for container in containers:
-            infos.append({                "id": container.id,
+            infos.append({                
+                "id": container.id,
                 "name": container.name,
                 "status": container.status,
                 "image": container.image,
                 "ports": container.ports,
-                "web_port": container.ports["80/tcp"],
-                "ssh_port": container.ports["22/tcp"],
-                "volumes": container.volumes,
-                "data_folder": container.volumes["/a0"],
+                "web_port": (container.ports.get("80/tcp") or [{}])[0].get("HostPort"),
+                "ssh_port": (container.ports.get("22/tcp") or [{}])[0].get("HostPort"),
+                # "volumes": container.volumes,
+                # "data_folder": container.volumes["/a0"],
             })
         return infos
 

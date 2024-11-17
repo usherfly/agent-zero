@@ -7,12 +7,12 @@ import uuid
 from flask import Flask, request, jsonify, Response
 from flask_basicauth import BasicAuth
 from agent import AgentContext
-from initialize import initialize, set_global_kwargs
+from initialize import initialize
 from python.helpers import files
 from python.helpers.files import get_abs_path
 from python.helpers.print_style import PrintStyle
 from python.helpers.dotenv import load_dotenv
-from python.helpers import persist_chat, settings, whisper, rfc, runtime
+from python.helpers import persist_chat, settings, whisper, rfc, runtime, dotenv
 import base64
 from werkzeug.utils import secure_filename
 from python.helpers.cloudflare_tunnel import CloudflareTunnel
@@ -24,13 +24,7 @@ app.config["JSON_SORT_KEYS"] = False  # Disable key sorting in jsonify
 
 lock = threading.Lock()
 
-# Set up basic authentication, name and password from .env variables
-app.config["BASIC_AUTH_USERNAME"] = (
-    os.environ.get("BASIC_AUTH_USERNAME") or "admin"
-)  # default name
-app.config["BASIC_AUTH_PASSWORD"] = (
-    os.environ.get("BASIC_AUTH_PASSWORD") or "admin"
-)  # default pass
+# Set up basic authentication
 basic_auth = BasicAuth(app)
 
 
@@ -52,17 +46,20 @@ def get_context(ctxid: str):
 def requires_auth(f):
     @wraps(f)
     async def decorated(*args, **kwargs):
-        auth = request.authorization
-        if not auth or not (
-            auth.username == app.config["BASIC_AUTH_USERNAME"]
-            and auth.password == app.config["BASIC_AUTH_PASSWORD"]
-        ):
-            return Response(
-                "Could not verify your access level for that URL.\n"
-                "You have to login with proper credentials",
-                401,
-                {"WWW-Authenticate": 'Basic realm="Login Required"'},
-            )
+        user = dotenv.get_dotenv_value("AUTH_LOGIN")
+        password = dotenv.get_dotenv_value("AUTH_PASSWORD")
+        if user and password:    
+            auth = request.authorization
+            if not auth or not (
+                auth.username == user
+                and auth.password == password
+            ):
+                return Response(
+                    "Could not verify your access level for that URL.\n"
+                    "You have to login with proper credentials",
+                    401,
+                    {"WWW-Authenticate": 'Basic realm="Login Required"'},
+                )
         return await f(*args, **kwargs)
 
     return decorated
@@ -72,6 +69,7 @@ UPLOAD_FOLDER = os.path.join(os.getcwd(), "work_dir", "uploads")
 
 
 @app.route("/upload", methods=["POST"])
+@requires_auth
 async def upload_file():
     if "file" not in request.files:
         return jsonify({"ok": False, "message": "No file part"}), 400
@@ -89,13 +87,12 @@ async def upload_file():
 
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "txt", "pdf", "csv", "html", "json", "md"}
-
-
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @app.route("/import_knowledge", methods=["POST"])
+@requires_auth
 async def import_knowledge():
     if "files[]" not in request.files:
         return jsonify({"ok": False, "message": "No files part"}), 400
@@ -117,6 +114,7 @@ async def import_knowledge():
 
 
 @app.route("/work_dir", methods=["GET"])  # Correct route
+@requires_auth
 async def browse_work_dir():
     work_dir = os.path.join(os.getcwd(), "work_dir")
     try:
@@ -135,6 +133,7 @@ async def browse_work_dir():
 
 # handle default address, show demo html page from ./test_form.html
 @app.route("/", methods=["GET"])
+@requires_auth
 async def test_form():
     return Path(get_abs_path("./webui/index.html")).read_text()
 
@@ -144,22 +143,16 @@ async def test_form():
 async def health_check():
     return "OK"
 
-
-# # secret page, requires authentication
-# @app.route('/secret', methods=['GET'])
-# @requires_auth
-# async def secret_page():
-#     return Path("./secret_page.html").read_text()
-
-
 # send message to agent (async UI)
 @app.route("/msg", methods=["POST"])
+@requires_auth
 async def handle_message_async():
     return await handle_message(False)
 
 
 # send message to agent (synchronous API)
 @app.route("/msg_sync", methods=["POST"])
+@requires_auth
 async def handle_msg_sync():
     return await handle_message(True)
 
@@ -255,6 +248,7 @@ async def handle_message(sync: bool):
 
 # pausing/unpausing the agent
 @app.route("/pause", methods=["POST"])
+@requires_auth
 async def pause():
     try:
 
@@ -287,6 +281,7 @@ async def pause():
 
 # load chats from json
 @app.route("/loadChats", methods=["POST"])
+@requires_auth
 async def load_chats():
     try:
         # data sent to the server
@@ -316,6 +311,7 @@ async def load_chats():
 
 # save chats to json
 @app.route("/exportChat", methods=["POST"])
+@requires_auth
 async def export_chat():
     try:
         # data sent to the server
@@ -347,6 +343,7 @@ async def export_chat():
 
 # restarting with new agent0
 @app.route("/reset", methods=["POST"])
+@requires_auth
 async def reset():
     try:
 
@@ -377,6 +374,7 @@ async def reset():
 
 # killing context
 @app.route("/remove", methods=["POST"])
+@requires_auth
 async def remove():
     try:
 
@@ -406,6 +404,7 @@ async def remove():
 
 # Web UI polling
 @app.route("/poll", methods=["POST"])
+@requires_auth
 async def poll():
     try:
 
@@ -460,6 +459,7 @@ async def poll():
 
 # get current settings
 @app.route("/getSettings", methods=["POST"])
+@requires_auth
 async def get_settings():
     try:
 
@@ -483,6 +483,7 @@ async def get_settings():
 
 # set current settings
 @app.route("/setSettings", methods=["POST"])
+@requires_auth
 async def set_settings():
     try:
 
@@ -507,6 +508,7 @@ async def set_settings():
 
 # transcribe audio
 @app.route("/transcribe", methods=["POST"])
+@requires_auth
 async def transcribe():
     try:
 
@@ -535,6 +537,7 @@ async def transcribe():
 
 # remote function call
 @app.route("/rfc", methods=["POST"])
+@requires_auth
 async def handle_rfc():
     # data sent to the server
     input = json.loads(request.get_json())

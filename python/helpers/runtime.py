@@ -66,4 +66,4 @@ def _get_rfc_url() -> str:
             logger=None,
         )
     conts = dockerman.get_image_containers()
-    return f"http://localhost:{conts[0]['web_port']}"
+    return f"http://localhost:{conts[0]['web_port']}/rfc"
