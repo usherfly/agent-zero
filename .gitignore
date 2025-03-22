@@ -47,3 +47,131 @@ instruments/**
 # Global rule to include .gitkeep files anywhere
 !**/.gitkeep
 agent_history.gif
+
+# 补充敏感信息和环境配置
+# 环境变量和密钥文件
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+*.pem
+*.key
+
+# 各种编辑器和IDE生成的文件
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+*.sublime-workspace
+*.sublime-project
+
+# 操作系统文件
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# Python相关文件
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Node相关文件（如果有前端组件）
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+.pnp/
+.pnp.js
+
+# 数据库文件
+*.sqlite
+*.sqlite3
+*.db
+
+# 备份文件
+*.bak
+*.backup
+*.old
+*_backup
+
+# 临时文件
+*.tmp
+.temp/
+.cache/
+
+# 日志文件
+*.log
+
+# 运行时生成的文件
+settings.json
+
+# 特定于Agent Zero的文件
+# 添加任何与RFC密码相关的文件
+*rfc_password*
+*root_password*
+
+# conda环境和虚拟环境
+agent_zero_env/
+agent_zero_py311/
+agent_zero_*/
+*_env/
+env/
+venv/
+ENV/
+
+# 二进制文件和库文件
+*.dll
+*.so
+*.dylib
+*.exe
+*.bin
+*.dat
+*.lib
+*.a
+*.o
+*.obj
+*.pyd
+
+# 特定环境相关目录和文件
+**/Lib/site-packages/
+**/Scripts/
+**/conda-meta/
+**/etc/
+**/include/
+**/share/
+**/ssl/
+python.exe
+python*.exe
+pip.exe
+pip*.exe
+**/faiss_cpu/
+**/faiss_cpu/libs/
+**/numpy/
+**/torch/
+**/site-packages.zip

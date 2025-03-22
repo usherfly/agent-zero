@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PurrFectAiApp - Market Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        dark: '#1e293b',
+                        light: '#f8fafc',
+                        success: '#10b981',
+                        danger: '#ef4444',
+                        warning: '#f59e0b',
+                        info: '#3b82f6',
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer components {
+            .tab-active {
+                @apply bg-primary text-white;
+            }
+            .tab-inactive {
+                @apply bg-gray-100 text-gray-700 hover:bg-gray-200;
+            }
+            .panel {
+                @apply bg-white rounded-lg shadow-md p-4 h-full overflow-auto;
+            }
+            .conversation-message {
+                @apply p-3 rounded-lg mb-3 max-w-[80%];
+            }
+            .user-message {
+                @apply bg-gray-100 ml-auto;
+            }
+            .ai-message {
+                @apply bg-primary/10 mr-auto;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-dark">
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-dark text-white p-4">
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-cat text-primary text-2xl"></i>
+                    <h1 class="text-xl font-bold">PurrFectAiApp</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="bg-green-500 px-3 py-1 rounded-full text-xs flex items-center">
+                        <span class="h-2 w-2 bg-white rounded-full mr-1"></span>
+                        Connected
+                    </div>
+                    <div class="text-sm">
+                        <span class="text-gray-400">Balance:</span> 
+                        <span class="font-bold">$12,450.32</span>
+                    </div>
+                    <div class="w-8 h-8 bg-gray-300 rounded-full overflow-hidden">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="bg-white shadow-sm">
+            <div class="container mx-auto">
+                <div class="flex">
+                    <button id="tab-main" class="tab-inactive px-6 py-4 font-medium rounded-t-lg">Main</button>
+                    <button id="tab-market" class="tab-active px-6 py-4 font-medium rounded-t-lg">Market</button>
+                    <button id="tab-trade" class="tab-inactive px-6 py-4 font-medium rounded-t-lg">Trade</button>
+                    <button id="tab-config" class="tab-inactive px-6 py-4 font-medium rounded-t-lg">Config</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="flex-grow container mx-auto p-4">
+            <div class="grid grid-cols-3 gap-4 h-[calc(100vh-12rem)]">
+                <!-- Workspace Panel (2/3 width) -->
+                <div class="col-span-2 panel" id="workspace-panel">
+                    <h2 class="text-xl font-bold mb-4">Market Analysis</h2>
+                    
+                    <!-- Market Overview -->
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold">Market Overview</h3>
+                            <div class="flex space-x-2">
+                                <button class="bg-primary/10 text-primary px-3 py-1 rounded-lg text-sm">1H</button>
+                                <button class="bg-gray-100 text-gray-700 px-3 py-1 rounded-lg text-sm">24H</button>
+                                <button class="bg-gray-100 text-gray-700 px-3 py-1 rounded-lg text-sm">7D</button>
+                                <button class="bg-gray-100 text-gray-700 px-3 py-1 rounded-lg text-sm">30D</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Market Stats -->
+                        <div class="grid grid-cols-4 gap-4 mb-6">
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <p class="text-gray-500 text-sm">Meme Coin Index</p>
+                                <p class="text-2xl font-bold">1,245.32</p>
+                                <p class="text-success text-sm">+3.2% <span class="text-gray-500">1h</span></p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <p class="text-gray-500 text-sm">Market Cap</p>
+                                <p class="text-2xl font-bold">$42.8B</p>
+                                <p class="text-success text-sm">+1.8% <span class="text-gray-500">1h</span></p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <p class="text-gray-500 text-sm">24h Volume</p>
+                                <p class="text-2xl font-bold">$5.2B</p>
+                                <p class="text-success text-sm">+12.4% <span class="text-gray-500">1h</span></p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <p class="text-gray-500 text-sm">Social Sentiment</p>
+                                <p class="text-2xl font-bold">Bullish</p>
+                                <p class="text-success text-sm">+5.7% <span class="text-gray-500">1h</span></p>
+                            </div>
+                        </div>
+                        
+                        <!-- Chart Placeholder -->
+                        <div class="bg-gray-50 rounded-lg p-4 h-64 flex items-center justify-center mb-6">
+                            <div class="text-center">
+                                <i class="fas fa-chart-line text-4xl text-gray-300 mb-2"></i>
+                                <p class="text-gray-500">Meme Coin Index Chart (Placeholder)</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Top Movers -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold mb-3">Top Movers</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Gainers -->
+                            <div>
+                                <h4 class="text-md font-medium text-success mb-2">Top Gainers</h4>
+                                <div class="bg-gray-50 rounded-lg overflow-hidden">
+                                    <table class="min-w-full">
+                                        <thead class="bg-gray-100">
+                                            <tr>
+                                                <th class="py-2 px-3 text-left text-xs font-medium text-gray-500">Coin</th>
+                                                <th class="py-2 px-3 text-left text-xs font-medium text-gray-500">Price</th>
+                                                <th class="py-2 px-3 text-left text-xs font-medium text-gray-500">Change</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-200">
+                                            <tr>
+                                                <td class="py-2 px-3">
+                                                    <div class="flex items-center">
+                                                        <div class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-white mr-2 text-xs">
+                                                            <i class="fas fa-frog"></i>
+                                                        </div>
+                                                        <span class="font-medium text-sm">PEPE</span>
+                                                    </div>
+                                                </td>
+                                                <td class="py-2 px-3 text-sm">$0.00000912</td>
+                                                <td class="py-2 px-3 text-success text-sm">+24.8%</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2 px-3">
+                                                    <div class="flex items-center">
+                                                        <div class="w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center text-white mr-2 text-xs">
+                                                            <i class="fas fa-dog"></i>
+                                                        </div>
+                                                        <span class="font-medium text-sm">FLOKI</span>
+                                                    </div>
+                                                </td>
+                                                <td class="py-2 px-3 text-sm">$0.00003512</td>
+                                                <td class="py-2 px-3 text-success text-sm">+18.2%</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2 px-3">
+                                                    <div class="flex items-center">
+                                                        <div class="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white mr-2 text-xs">
+                                                            <i class="fas fa-cat"></i>
+                                                        </div>
+                                                        <span class="font-medium text-sm">MCAT</span>
+                                                    </div>
+                                                </td>
+                                                <td class="py-2 px-3 text-sm">$0.00000124</td>
+                                                <td class="py-2 px-3 text-success text-sm">+15.7%</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <!-- Losers -->
+                            <div>
+                                <h4 class="text-md font-medium text-danger mb-2">Top Losers</h4>
+                                <div class="bg-gray-50 rounded-lg overflow-hidden">
+                                    <table class="min-w-full">
+                                        <thead class="bg-gray-100">
+                                            <tr>
+                                                <th class="py-2 px-3 text-left text-xs font-medium text-gray-500">Coin</th>
+                                                <th class="py-2 px-3 text-left text-xs font-medium text-gray-500">Price</th>
+                                                <th class="py-2 px-3 text-left text-xs font-medium text-gray-500">Change</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-200">
+                                            <tr>
+                                                <td class="py-2 px-3">
+                                                    <div class="flex items-center">
+                                                        <div class="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center text-white mr-2 text-xs">
+                                                            <i class="fas fa-paw"></i>
+                                                        </div>
+                                                        <span class="font-medium text-sm">PAWTH</span>
+                                                    </div>
+                                                </td>
+                                                <td class="py-2 px-3 text-sm">$0.00000045</td>
+                                                <td class="py-2 px-3 text-danger text-sm">-12.3%</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2 px-3">
+                                                    <div class="flex items-center">
+                                                        <div class="w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center text-white mr-2 text-xs">
+                                                            <i class="fas fa-fish"></i>
+                                                        </div>
+                                                        <span class="font-medium text-sm">FISH</span>
+                                                    </div>
+                                                </td>
+                                                <td class="py-2 px-3 text-sm">$0.00000078</td>
+                                                <td class="py-2 px-3 text-danger text-sm">-8.7%</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2 px-3">
+                                                    <div class="flex items-center">
+                                                        <div class="w-6 h-6 rounded-full bg-yellow-500 flex items-center justify-center text-white mr-2 text-xs">
+                                                            <i class="fas fa-feather"></i>
+                                                        </div>
+                                                        <span class="font-medium text-sm">BIRD</span>
+                                                    </div>
+                                                </td>
+                                                <td class="py-2 px-3 text-sm">$0.00000321</td>
+                                                <td class="py-2 px-3 text-danger text-sm">-6.2%</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Social Trends -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3">Social Trends</h3>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="text-md font-medium mb-2">Trending on Twitter</h4>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-center">
+                                            <span class="text-primary font-bold mr-2">#1</span>
+                                            <span class="bg-primary/10 text-primary px-2 py-1 rounded text-xs mr-2">$PEPE</span>
+                                            <span class="text-sm">+245% mentions</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <span class="text-primary font-bold mr-2">#2</span>
+                                            <span class="bg-primary/10 text-primary px-2 py-1 rounded text-xs mr-2">$DOGE</span>
+                                            <span class="text-sm">+124% mentions</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <span class="text-primary font-bold mr-2">#3</span>
+                                            <span class="bg-primary/10 text-primary px-2 py-1 rounded text-xs mr-2">$FLOKI</span>
+                                            <span class="text-sm">+98% mentions</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="text-md font-medium mb-2">Trending on Reddit</h4>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-center">
+                                            <span class="text-primary font-bold mr-2">#1</span>
+                                            <span class="bg-primary/10 text-primary px-2 py-1 rounded text-xs mr-2">$PEPE</span>
+                                            <span class="text-sm">+178% posts</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <span class="text-primary font-bold mr-2">#2</span>
+                                            <span class="bg-primary/10 text-primary px-2 py-1 rounded text-xs mr-2">$SHIB</span>
+                                            <span class="text-sm">+112% posts</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <span class="text-primary font-bold mr-2">#3</span>
+                                            <span class="bg-primary/10 text-primary px-2 py-1 rounded text-xs mr-2">$MCAT</span>
+                                            <span class="text-sm">+87% posts</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Conversation Panel (1/3 width) -->
+                <div class="panel" id="conversation-panel">
+                    <div class="flex flex-col h-full">
+                        <h2 class="text-xl font-bold mb-4">AI Assistant</h2>
+                        
+                        <!-- Conversation History -->
+                        <div class="flex-grow overflow-y-auto mb-4 space-y-4">
+                            <div class="ai-message conversation-message">
+                                <p>I'm analyzing the current market trends. What specific information are you looking for?</p>
+                            </div>
+                            
+                            <div class="user-message conversation-message">
+                                <p>What's happening with PEPE today?</p>
+                            </div>
+                            
+                            <div class="ai-message conversation-message">
+                                <p>PEPE is up 24.8% in the last 24 hours, making it the top gainer among meme coins. The surge appears to be driven by a viral tweet from a crypto influencer with 1.2M followers and increased activity in their Discord community. Trading volume is up 312% compared to yesterday.</p>
+                            </div>
+                            
+                            <div class="user-message conversation-message">
+                                <p>Should I buy some?</p>
+                            </div>
+                            
+                            <div class="ai-message conversation-message">
+                                <p>Based on your risk profile and current portfolio allocation, I would recommend a small position of no more than 2% of your portfolio. The momentum indicators are strong, but the RSI is approaching overbought territory at 68. If you decide to enter, consider setting a stop loss at $0.00000825 (9.5% below current price).</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Input Area -->
+                        <div class="border-t pt-4">
+                            <div class="relative">
+                                <input type="text" placeholder="Ask about market trends..." class="w-full border rounded-full py-3 px-4 pr-12 focus:outline-none focus:ring-2 focus:ring-primary">
+                                <button class="absolute right-2 top-2 bg-primary text-white p-2 rounded-full">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Simple tab switching functionality
+        document.querySelectorAll('[id^="tab-"]').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // In a real app, this would navigate to the appropriate page
+                if (tab.id === 'tab-main') {
+                    window.location.href = 'index.html';
+                } else if (tab.id === 'tab-market') {
+                    window.location.href = 'market.html';
+                } else if (tab.id === 'tab-trade') {
+                    window.location.href = 'trade.html';
+                } else if (tab.id === 'tab-config') {
+                    window.location.href = 'config.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

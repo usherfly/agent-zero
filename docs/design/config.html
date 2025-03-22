@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PurrFectAiApp - Configuration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        dark: '#1e293b',
+                        light: '#f8fafc',
+                        success: '#10b981',
+                        danger: '#ef4444',
+                        warning: '#f59e0b',
+                        info: '#3b82f6',
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer components {
+            .tab-active {
+                @apply bg-primary text-white;
+            }
+            .tab-inactive {
+                @apply bg-gray-100 text-gray-700 hover:bg-gray-200;
+            }
+            .panel {
+                @apply bg-white rounded-lg shadow-md p-4 h-full overflow-auto;
+            }
+            .conversation-message {
+                @apply p-3 rounded-lg mb-3 max-w-[80%];
+            }
+            .user-message {
+                @apply bg-gray-100 ml-auto;
+            }
+            .ai-message {
+                @apply bg-primary/10 mr-auto;
+            }
+            .config-section {
+                @apply bg-gray-50 rounded-lg p-4 mb-4;
+            }
+            .config-item {
+                @apply py-3 border-b border-gray-200 last:border-0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-dark">
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-dark text-white p-4">
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-cat text-primary text-2xl"></i>
+                    <h1 class="text-xl font-bold">PurrFectAiApp</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="bg-green-500 px-3 py-1 rounded-full text-xs flex items-center">
+                        <span class="h-2 w-2 bg-white rounded-full mr-1"></span>
+                        Connected
+                    </div>
+                    <div class="text-sm">
+                        <span class="text-gray-400">Balance:</span> 
+                        <span class="font-bold">$12,450.32</span>
+                    </div>
+                    <div class="w-8 h-8 bg-gray-300 rounded-full overflow-hidden">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="bg-white shadow-sm">
+            <div class="container mx-auto">
+                <div class="flex">
+                    <button id="tab-main" class="tab-inactive px-6 py-4 font-medium rounded-t-lg">Main</button>
+                    <button id="tab-market" class="tab-inactive px-6 py-4 font-medium rounded-t-lg">Market</button>
+                    <button id="tab-trade" class="tab-inactive px-6 py-4 font-medium rounded-t-lg">Trade</button>
+                    <button id="tab-config" class="tab-active px-6 py-4 font-medium rounded-t-lg">Config</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="flex-grow container mx-auto p-4">
+            <div class="grid grid-cols-3 gap-4 h-[calc(100vh-12rem)]">
+                <!-- Workspace Panel (2/3 width) -->
+                <div class="col-span-2 panel" id="workspace-panel">
+                    <h2 class="text-xl font-bold mb-4">Configuration</h2>
+                    
+                    <!-- Config Tabs -->
+                    <div class="border-b border-gray-200 mb-4">
+                        <div class="flex space-x-4">
+                            <button class="px-4 py-2 border-b-2 border-primary text-primary font-medium">Trading Parameters</button>
+                            <button class="px-4 py-2 text-gray-500 hover:text-gray-700">Exchange Connections</button>
+                            <button class="px-4 py-2 text-gray-500 hover:text-gray-700">Notifications</button>
+                            <button class="px-4 py-2 text-gray-500 hover:text-gray-700">Account</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Trading Parameters Section -->
+                    <div>
+                        <!-- Risk Management -->
+                        <div class="config-section">
+                            <h3 class="text-lg font-semibold mb-3">Risk Management</h3>
+                            
+                            <div class="config-item grid grid-cols-3 gap-4 items-center">
+                                <div>
+                                    <label class="font-medium">Max Allocation Per Trade</label>
+                                    <p class="text-sm text-gray-500">Maximum capital allocated to a single position</p>
+                                </div>
+                                <div class="col-span-2">
+                                    <div class="flex items-center">
+                                        <input type="range" min="1" max="20" value="5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                        <span class="ml-3 bg-primary/10 text-primary px-2 py-1 rounded text-sm min-w-[60px] text-center">5%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="config-item grid grid-cols-3 gap-4 items-center">
+                                <div>
+                                    <label class="font-medium">Risk/Reward Ratio</label>
+                                    <p class="text-sm text-gray-500">Target profit relative to stop loss</p>
+                                </div>
+                                <div class="col-span-2">
+                                    <div class="flex space-x-2">
+                                        <button class="px-3 py-1 rounded-lg text-sm bg-gray-200 text-gray-700">1:1</button>
+                                        <button class="px-3 py-1 rounded-lg text-sm bg-primary text-white">2:1</button>
+                                        <button class="px-3 py-1 rounded-lg text-sm bg-gray-200 text-gray-700">3:1</button>
+                                        <button class="px-3 py-1 rounded-lg text-sm bg-gray-200 text-gray-700">Custom</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="config-item grid grid-cols-3 gap-4 items-center">
+                                <div>
+                                    <label class="font-medium">Maximum Concurrent Positions</label>
+                                    <p class="text-sm text-gray-500">Number of open positions allowed simultaneously</p>
+                                </div>
+                                <div class="col-span-2">
+                                    <div class="flex items-center space-x-2">
+                                        <button class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">-</button>
+                                        <span class="bg-primary/10 text-primary px-4 py-1 rounded text-lg font-medium min-w-[40px] text-center">3</span>
+                                        <button class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="config-item grid grid-cols-3 gap-4 items-center">
+                                <div>
+                                    <label class="font-medium">Total Portfolio Exposure</label>
+                                    <p class="text-sm text-gray-500">Maximum percentage of portfolio in meme coins</p>
+                                </div>
+                                <div class="col-span-2">
+                                    <div class="flex items-center">
+                                        <input type="range" min="5" max="50" value="15" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                        <span class="ml-3 bg-primary/10 text-primary px-2 py-1 rounded text-sm min-w-[60px] text-center">15%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Default Trade Parameters -->
+                        <div class="config-section">
+                            <h3 class="text-lg font-semibold mb-3">Default Trade Parameters</h3>
+                            
+                            <div class="config-item grid grid-cols-3 gap-4 items-center">
+                                <div>
+                                    <label class="font-medium">Default Stop Loss</label>
+                                    <p class="text-sm text-gray-500">Default stop loss percentage</p>
+                                </div>
+                                <div class="col-span-2">
+                                    <div class="flex items-center">
+                                        <input type="range" min="3" max="15" value="7" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                        <span class="ml-3 bg-primary/10 text-primary px-2 py-1 rounded text-sm min-w-[60px] text-center">7%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="config-item grid grid-cols-3 gap-4 items-center">
+                                <div>
+                                    <label class="font-medium">Default Take Profit</label>
+                                    <p class="text-sm text-gray-500">Default take profit percentage</p>
+                                </div>
+                                <div class="col-span-2">
+                                    <div class="flex items-center">
+                                        <input type="range" min="5" max="30" value="15" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                        <span class="ml-3 bg-primary/10 text-primary px-2 py-1 rounded text-sm min-w-[60px] text-center">15%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="config-item grid grid-cols-3 gap-4 items-center">
+                                <div>
+                                    <label class="font-medium">Order Type</label>
+                                    <p class="text-sm text-gray-500">Default order type for trades</p>
+                                </div>
+                                <div class="col-span-2">
+                                    <div class="flex space-x-2">
+                                        <button class="px-3 py-1 rounded-lg text-sm bg-primary text-white">Limit</button>
+                                        <button class="px-3 py-1 rounded-lg text-sm bg-gray-200 text-gray-700">Market</button>
+                                        <button class="px-3 py-1 rounded-lg text-sm bg-gray-200 text-gray-700">Stop Limit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- AI Trading Behavior -->
+                        <div class="config-section">
+                            <h3 class="text-lg font-semibold mb-3">AI Trading Behavior</h3>
+                            
+                            <div class="config-item grid grid-cols-3 gap-4 items-center">
+                                <div>
+                                    <label class="font-medium">Trading Style</label>
+                                    <p class="text-sm text-gray-500">Overall approach to trading</p>
+                                </div>
+                                <div class="col-span-2">
+                                    <div class="flex space-x-2">
+                                        <button class="px-3 py-1 rounded-lg text-sm bg-gray-200 text-gray-700">Conservative</button>
+                                        <button class="px-3 py-1 rounded-lg text-sm bg-primary text-white">Balanced</button>
+                                        <button class="px-3 py-1 rounded-lg text-sm bg-gray-200 text-gray-700">Aggressive</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="config-item grid grid-cols-3 gap-4 items-center">
+                                <div>
+                                    <label class="font-medium">Signal Confirmation</label>
+                                    <p class="text-sm text-gray-500">Number of signals required before trading</p>
+                                </div>
+                                <div class="col-span-2">
+                                    <div class="flex space-x-2">
+                                        <button class="px-3 py-1 rounded-lg text-sm bg-gray-200 text-gray-700">Single</button>
+                                        <button class="px-3 py-1 rounded-lg text-sm bg-primary text-white">Multiple</button>
+                                        <button class="px-3 py-1 rounded-lg text-sm bg-gray-200 text-gray-700">Strong</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="config-item grid grid-cols-3 gap-4 items-center">
+                                <div>
+                                    <label class="font-medium">Autonomy Level</label>
+                                    <p class="text-sm text-gray-500">How much control the AI has</p>
+                                </div>
+                                <div class="col-span-2">
+                                    <div class="flex items-center">
+                                        <input type="range" min="1" max="3" value="2" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                        <span class="ml-3 bg-primary/10 text-primary px-2 py-1 rounded text-sm min-w-[120px] text-center">Semi-Autonomous</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="config-item">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <label class="font-medium">Automatic Trading</label>
+                                        <p class="text-sm text-gray-500">Allow AI to execute trades without confirmation</p>
+                                    </div>
+                                    <div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" value="" class="sr-only peer" checked>
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-end space-x-3">
+                            <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg">Reset to Defaults</button>
+                            <button class="px-4 py-2 bg-primary text-white rounded-lg">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Conversation Panel (1/3 width) -->
+                <div class="panel" id="conversation-panel">
+                    <div class="flex flex-col h-full">
+                        <h2 class="text-xl font-bold mb-4">AI Assistant</h2>
+                        
+                        <!-- Conversation History -->
+                        <div class="flex-grow overflow-y-auto mb-4 space-y-4">
+                            <div class="ai-message conversation-message">
+                                <p>I see you're in the configuration section. What would you like to adjust in your trading parameters?</p>
+                            </div>
+                            
+                            <div class="user-message conversation-message">
+                                <p>I want to be more aggressive with my trading</p>
+                            </div>
+                            
+                            <div class="ai-message conversation-message">
+                                <p>I can help you adjust your settings for a more aggressive trading approach. Here are the changes I recommend:</p>
+                                <ul class="list-disc pl-5 mt-2">
+                                    <li>Increase max allocation per trade from 5% to 8%</li>
+                                    <li>Change risk/reward ratio from 2:1 to 1.5:1</li>
+                                    <li>Increase maximum concurrent positions from 3 to 5</li>
+                                    <li>Increase total portfolio exposure from 15% to 25%</li>
+                                    <li>Change trading style from "Balanced" to "Aggressive"</li>
+                                </ul>
+                                <p class="mt-2">Would you like me to apply these changes?</p>
+                            </div>
+                            
+                            <div class="user-message conversation-message">
+                                <p>Yes, but keep the risk/reward ratio at 2:1</p>
+                            </div>
+                            
+                            <div class="ai-message conversation-message">
+                                <p>I've updated your configuration with the more aggressive settings while maintaining your 2:1 risk/reward ratio. The changes have been saved. Your trading strategy is now more aggressive, which may lead to higher potential returns but also increased risk. I'll monitor your portfolio closely with these new parameters.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Input Area -->
+                        <div class="border-t pt-4">
+                            <div class="relative">
+                                <input type="text" placeholder="Ask about configuration..." class="w-full border rounded-full py-3 px-4 pr-12 focus:outline-none focus:ring-2 focus:ring-primary">
+                                <button class="absolute right-2 top-2 bg-primary text-white p-2 rounded-full">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Simple tab switching functionality
+        document.querySelectorAll('[id^="tab-"]').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // In a real app, this would navigate to the appropriate page
+                if (tab.id === 'tab-main') {
+                    window.location.href = 'index.html';
+                } else if (tab.id === 'tab-market') {
+                    window.location.href = 'market.html';
+                } else if (tab.id === 'tab-trade') {
+                    window.location.href = 'trade.html';
+                } else if (tab.id === 'tab-config') {
+                    window.location.href = 'config.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

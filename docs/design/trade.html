@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PurrFectAiApp - Trading Interface</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        dark: '#1e293b',
+                        light: '#f8fafc',
+                        success: '#10b981',
+                        danger: '#ef4444',
+                        warning: '#f59e0b',
+                        info: '#3b82f6',
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer components {
+            .tab-active {
+                @apply bg-primary text-white;
+            }
+            .tab-inactive {
+                @apply bg-gray-100 text-gray-700 hover:bg-gray-200;
+            }
+            .panel {
+                @apply bg-white rounded-lg shadow-md p-4 h-full overflow-auto;
+            }
+            .conversation-message {
+                @apply p-3 rounded-lg mb-3 max-w-[80%];
+            }
+            .user-message {
+                @apply bg-gray-100 ml-auto;
+            }
+            .ai-message {
+                @apply bg-primary/10 mr-auto;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-dark">
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-dark text-white p-4">
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-cat text-primary text-2xl"></i>
+                    <h1 class="text-xl font-bold">PurrFectAiApp</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="bg-green-500 px-3 py-1 rounded-full text-xs flex items-center">
+                        <span class="h-2 w-2 bg-white rounded-full mr-1"></span>
+                        Connected
+                    </div>
+                    <div class="text-sm">
+                        <span class="text-gray-400">Balance:</span> 
+                        <span class="font-bold">$12,450.32</span>
+                    </div>
+                    <div class="w-8 h-8 bg-gray-300 rounded-full overflow-hidden">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="bg-white shadow-sm">
+            <div class="container mx-auto">
+                <div class="flex">
+                    <button id="tab-main" class="tab-inactive px-6 py-4 font-medium rounded-t-lg">Main</button>
+                    <button id="tab-market" class="tab-inactive px-6 py-4 font-medium rounded-t-lg">Market</button>
+                    <button id="tab-trade" class="tab-active px-6 py-4 font-medium rounded-t-lg">Trade</button>
+                    <button id="tab-config" class="tab-inactive px-6 py-4 font-medium rounded-t-lg">Config</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="flex-grow container mx-auto p-4">
+            <div class="grid grid-cols-3 gap-4 h-[calc(100vh-12rem)]">
+                <!-- Workspace Panel (2/3 width) -->
+                <div class="col-span-2 panel" id="workspace-panel">
+                    <h2 class="text-xl font-bold mb-4">Trading Interface</h2>
+                    
+                    <div class="grid grid-cols-3 gap-4">
+                        <!-- Left Column: Trading Pair Selection -->
+                        <div class="col-span-1">
+                            <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                                <h3 class="text-lg font-semibold mb-3">Select Pair</h3>
+                                <div class="relative mb-4">
+                                    <input type="text" placeholder="Search coins..." class="w-full border rounded-lg py-2 px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-primary">
+                                    <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+                                </div>
+                                
+                                <div class="space-y-1 max-h-[400px] overflow-y-auto">
+                                    <div class="bg-primary/10 p-2 rounded-lg flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center text-white mr-2">
+                                                <i class="fab fa-bitcoin"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium">DOGE/USDT</p>
+                                                <p class="text-xs text-gray-500">Dogecoin</p>
+                                            </div>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="font-medium">$0.0921</p>
+                                            <p class="text-xs text-success">+9.38%</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="hover:bg-gray-100 p-2 rounded-lg flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white mr-2">
+                                                <i class="fas fa-rocket"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium">SHIB/USDT</p>
+                                                <p class="text-xs text-gray-500">Shiba Inu</p>
+                                            </div>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="font-medium">$0.00000895</p>
+                                            <p class="text-xs text-danger">-1.86%</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="hover:bg-gray-100 p-2 rounded-lg flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white mr-2">
+                                                <i class="fas fa-dog"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium">FLOKI/USDT</p>
+                                                <p class="text-xs text-gray-500">Floki Inu</p>
+                                            </div>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="font-medium">$0.00003512</p>
+                                            <p class="text-xs text-success">+8.23%</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="hover:bg-gray-100 p-2 rounded-lg flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white mr-2">
+                                                <i class="fas fa-frog"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium">PEPE/USDT</p>
+                                                <p class="text-xs text-gray-500">Pepe</p>
+                                            </div>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="font-medium">$0.00000912</p>
+                                            <p class="text-xs text-success">+24.8%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <h3 class="text-lg font-semibold mb-3">Exchange</h3>
+                                <div class="space-y-2">
+                                    <div class="flex items-center space-x-2">
+                                        <input type="radio" id="binance" name="exchange" checked class="text-primary focus:ring-primary">
+                                        <label for="binance" class="flex items-center">
+                                            <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.png?v=024" alt="Binance" class="w-5 h-5 mr-2">
+                                            Binance
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <input type="radio" id="kucoin" name="exchange" class="text-primary focus:ring-primary">
+                                        <label for="kucoin" class="flex items-center">
+                                            <img src="https://cryptologos.cc/logos/kucoin-token-kcs-logo.png?v=024" alt="KuCoin" class="w-5 h-5 mr-2">
+                                            KuCoin
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <input type="radio" id="uniswap" name="exchange" class="text-primary focus:ring-primary">
+                                        <label for="uniswap" class="flex items-center">
+                                            <img src="https://cryptologos.cc/logos/uniswap-uni-logo.png?v=024" alt="Uniswap" class="w-5 h-5 mr-2">
+                                            Uniswap
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Middle Column: Chart -->
+                        <div class="col-span-2">
+                            <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                                <div class="flex justify-between items-center mb-4">
+                                    <div>
+                                        <h3 class="text-lg font-semibold">DOGE/USDT</h3>
+                                        <div class="flex items-center">
+                                            <span class="text-2xl font-bold mr-2">$0.0921</span>
+                                            <span class="text-success bg-success/10 px-2 py-1 rounded text-sm">+9.38%</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded-lg text-sm">1m</button>
+                                        <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded-lg text-sm">5m</button>
+                                        <button class="bg-primary/10 text-primary px-3 py-1 rounded-lg text-sm">15m</button>
+                                        <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded-lg text-sm">1h</button>
+                                        <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded-lg text-sm">4h</button>
+                                        <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded-lg text-sm">1d</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Chart Placeholder -->
+                                <div class="bg-white border rounded-lg p-4 h-64 flex items-center justify-center">
+                                    <div class="text-center">
+                                        <i class="fas fa-chart-line text-4xl text-gray-300 mb-2"></i>
+                                        <p class="text-gray-500">Price Chart (Placeholder)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Order Form -->
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <h3 class="text-lg font-semibold mb-3">Place Order</h3>
+                                
+                                <div class="flex space-x-4 mb-4">
+                                    <button class="flex-1 bg-success text-white py-2 rounded-lg font-medium">Buy</button>
+                                    <button class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg font-medium">Sell</button>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Amount (DOGE)</label>
+                                        <div class="relative">
+                                            <input type="text" value="1000" class="w-full border rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary">
+                                            <div class="absolute right-2 top-2 flex space-x-1">
+                                                <button class="text-xs bg-gray-200 px-1 rounded">25%</button>
+                                                <button class="text-xs bg-gray-200 px-1 rounded">50%</button>
+                                                <button class="text-xs bg-gray-200 px-1 rounded">Max</button>
+                                            </div>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-1">≈ $92.10</p>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Price (USDT)</label>
+                                        <div class="relative">
+                                            <input type="text" value="0.0921" class="w-full border rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary">
+                                            <div class="absolute right-2 top-2">
+                                                <button class="text-xs bg-gray-200 px-1 rounded">Market</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Stop Loss</label>
+                                        <input type="text" value="0.0850" class="w-full border rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary">
+                                        <p class="text-xs text-gray-500 mt-1">-7.71% from entry</p>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Take Profit</label>
+                                        <input type="text" value="0.1060" class="w-full border rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary">
+                                        <p class="text-xs text-gray-500 mt-1">+15.09% from entry</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-4">
+                                    <button class="w-full bg-success text-white py-3 rounded-lg font-medium">Place Buy Order</button>
+                                </div>
+                                
+                                <div class="mt-4 text-xs text-gray-500">
+                                    <p>Fee: 0.1% (≈ $0.09)</p>
+                                    <p>Total: $92.19</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Conversation Panel (1/3 width) -->
+                <div class="panel" id="conversation-panel">
+                    <div class="flex flex-col h-full">
+                        <h2 class="text-xl font-bold mb-4">AI Assistant</h2>
+                        
+                        <!-- Conversation History -->
+                        <div class="flex-grow overflow-y-auto mb-4 space-y-4">
+                            <div class="ai-message conversation-message">
+                                <p>I see you're looking at DOGE/USDT. The price has increased by 9.38% in the last 24 hours. Would you like me to analyze this pair for potential entry points?</p>
+                            </div>
+                            
+                            <div class="user-message conversation-message">
+                                <p>Yes, please analyze DOGE and suggest an entry strategy</p>
+                            </div>
+                            
+                            <div class="ai-message conversation-message">
+                                <p>Based on technical analysis, DOGE is showing bullish momentum with the price breaking above the 50-day moving average. The RSI is at 62, indicating strength but not yet overbought.</p>
+                                <p class="mt-2">I recommend a scaled entry approach:</p>
+                                <ul class="list-disc pl-5 mt-1">
+                                    <li>50% position at current price ($0.0921)</li>
+                                    <li>25% if price dips to $0.0890</li>
+                                    <li>25% if price dips to $0.0870</li>
+                                </ul>
+                                <p class="mt-2">Set stop loss at $0.0850 (-7.71%) and take profit at $0.1060 (+15.09%).</p>
+                            </div>
+                            
+                            <div class="user-message conversation-message">
+                                <p>That sounds good. What's the risk level?</p>
+                            </div>
+                            
+                            <div class="ai-message conversation-message">
+                                <p>This trade has a moderate risk level (6/10). The risk-to-reward ratio is approximately 1:2, which aligns with your trading preferences. The position size of $92.10 represents about 0.74% of your total portfolio, which is within your risk parameters.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Input Area -->
+                        <div class="border-t pt-4">
+                            <div class="relative">
+                                <input type="text" placeholder="Ask about trading strategies..." class="w-full border rounded-full py-3 px-4 pr-12 focus:outline-none focus:ring-2 focus:ring-primary">
+                                <button class="absolute right-2 top-2 bg-primary text-white p-2 rounded-full">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Simple tab switching functionality
+        document.querySelectorAll('[id^="tab-"]').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // In a real app, this would navigate to the appropriate page
+                if (tab.id === 'tab-main') {
+                    window.location.href = 'index.html';
+                } else if (tab.id === 'tab-market') {
+                    window.location.href = 'market.html';
+                } else if (tab.id === 'tab-trade') {
+                    window.location.href = 'trade.html';
+                } else if (tab.id === 'tab-config') {
+                    window.location.href = 'config.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

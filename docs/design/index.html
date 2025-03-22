@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PurrFectAiApp - Autonomous Trading AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        dark: '#1e293b',
+                        light: '#f8fafc',
+                        success: '#10b981',
+                        danger: '#ef4444',
+                        warning: '#f59e0b',
+                        info: '#3b82f6',
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer components {
+            .tab-active {
+                @apply bg-primary text-white;
+            }
+            .tab-inactive {
+                @apply bg-gray-100 text-gray-700 hover:bg-gray-200;
+            }
+            .panel {
+                @apply bg-white rounded-lg shadow-md p-4 h-full overflow-auto;
+            }
+            .conversation-message {
+                @apply p-3 rounded-lg mb-3 max-w-[80%];
+            }
+            .user-message {
+                @apply bg-gray-100 ml-auto;
+            }
+            .ai-message {
+                @apply bg-primary/10 mr-auto;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-dark">
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-dark text-white p-4">
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-cat text-primary text-2xl"></i>
+                    <h1 class="text-xl font-bold">PurrFectAiApp</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="bg-green-500 px-3 py-1 rounded-full text-xs flex items-center">
+                        <span class="h-2 w-2 bg-white rounded-full mr-1"></span>
+                        Connected
+                    </div>
+                    <div class="text-sm">
+                        <span class="text-gray-400">Balance:</span> 
+                        <span class="font-bold">$12,450.32</span>
+                    </div>
+                    <div class="w-8 h-8 bg-gray-300 rounded-full overflow-hidden">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="bg-white shadow-sm">
+            <div class="container mx-auto">
+                <div class="flex">
+                    <button id="tab-main" class="tab-active px-6 py-4 font-medium rounded-t-lg">Main</button>
+                    <button id="tab-market" class="tab-inactive px-6 py-4 font-medium rounded-t-lg">Market</button>
+                    <button id="tab-trade" class="tab-inactive px-6 py-4 font-medium rounded-t-lg">Trade</button>
+                    <button id="tab-config" class="tab-inactive px-6 py-4 font-medium rounded-t-lg">Config</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="flex-grow container mx-auto p-4">
+            <div class="grid grid-cols-3 gap-4 h-[calc(100vh-12rem)]">
+                <!-- Workspace Panel (2/3 width) -->
+                <div class="col-span-2 panel" id="workspace-panel">
+                    <h2 class="text-xl font-bold mb-4">Dashboard</h2>
+                    
+                    <!-- Portfolio Summary -->
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-gray-500 text-sm">Total Value</p>
+                            <p class="text-2xl font-bold">$12,450.32</p>
+                            <p class="text-success text-sm">+2.4% <span class="text-gray-500">today</span></p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-gray-500 text-sm">Active Positions</p>
+                            <p class="text-2xl font-bold">3</p>
+                            <p class="text-sm text-gray-500">of max 5</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-gray-500 text-sm">Today's P&L</p>
+                            <p class="text-2xl font-bold text-success">+$245.18</p>
+                            <p class="text-sm text-gray-500">5 trades</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Active Positions -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold mb-3">Active Positions</h3>
+                        <div class="bg-gray-50 rounded-lg overflow-hidden">
+                            <table class="min-w-full">
+                                <thead class="bg-gray-100">
+                                    <tr>
+                                        <th class="py-3 px-4 text-left text-sm font-medium text-gray-500">Coin</th>
+                                        <th class="py-3 px-4 text-left text-sm font-medium text-gray-500">Entry</th>
+                                        <th class="py-3 px-4 text-left text-sm font-medium text-gray-500">Current</th>
+                                        <th class="py-3 px-4 text-left text-sm font-medium text-gray-500">P&L</th>
+                                        <th class="py-3 px-4 text-left text-sm font-medium text-gray-500">Size</th>
+                                        <th class="py-3 px-4 text-left text-sm font-medium text-gray-500">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="py-3 px-4">
+                                            <div class="flex items-center">
+                                                <div class="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center text-white mr-2">
+                                                    <i class="fab fa-bitcoin"></i>
+                                                </div>
+                                                <span class="font-medium">DOGE</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-3 px-4">$0.0842</td>
+                                        <td class="py-3 px-4">$0.0921</td>
+                                        <td class="py-3 px-4 text-success">+9.38%</td>
+                                        <td class="py-3 px-4">$1,250.00</td>
+                                        <td class="py-3 px-4">
+                                            <button class="text-danger hover:text-red-700">
+                                                <i class="fas fa-times-circle"></i> Close
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4">
+                                            <div class="flex items-center">
+                                                <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white mr-2">
+                                                    <i class="fas fa-rocket"></i>
+                                                </div>
+                                                <span class="font-medium">SHIB</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-3 px-4">$0.00000912</td>
+                                        <td class="py-3 px-4">$0.00000895</td>
+                                        <td class="py-3 px-4 text-danger">-1.86%</td>
+                                        <td class="py-3 px-4">$750.00</td>
+                                        <td class="py-3 px-4">
+                                            <button class="text-danger hover:text-red-700">
+                                                <i class="fas fa-times-circle"></i> Close
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4">
+                                            <div class="flex items-center">
+                                                <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white mr-2">
+                                                    <i class="fas fa-dog"></i>
+                                                </div>
+                                                <span class="font-medium">FLOKI</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-3 px-4">$0.00003245</td>
+                                        <td class="py-3 px-4">$0.00003512</td>
+                                        <td class="py-3 px-4 text-success">+8.23%</td>
+                                        <td class="py-3 px-4">$500.00</td>
+                                        <td class="py-3 px-4">
+                                            <button class="text-danger hover:text-red-700">
+                                                <i class="fas fa-times-circle"></i> Close
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Signals -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3">Recent Signals</h3>
+                        <div class="space-y-3">
+                            <div class="bg-green-50 border-l-4 border-green-500 p-3 rounded-r-lg flex justify-between items-center">
+                                <div>
+                                    <p class="font-medium">Buy Signal: PEPE</p>
+                                    <p class="text-sm text-gray-600">Social media momentum + price breakout detected</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="bg-success text-white px-3 py-1 rounded-lg text-sm">Accept</button>
+                                    <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded-lg text-sm">Ignore</button>
+                                </div>
+                            </div>
+                            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 rounded-r-lg flex justify-between items-center">
+                                <div>
+                                    <p class="font-medium">Information: DOGE</p>
+                                    <p class="text-sm text-gray-600">Elon Musk tweet detected mentioning DOGE</p>
+                                </div>
+                                <div>
+                                    <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded-lg text-sm">Dismiss</button>
+                                </div>
+                            </div>
+                            <div class="bg-red-50 border-l-4 border-red-500 p-3 rounded-r-lg flex justify-between items-center">
+                                <div>
+                                    <p class="font-medium">Sell Signal: SHIB</p>
+                                    <p class="text-sm text-gray-600">Bearish pattern forming, consider taking profits</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="bg-danger text-white px-3 py-1 rounded-lg text-sm">Accept</button>
+                                    <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded-lg text-sm">Ignore</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Conversation Panel (1/3 width) -->
+                <div class="panel" id="conversation-panel">
+                    <div class="flex flex-col h-full">
+                        <h2 class="text-xl font-bold mb-4">AI Assistant</h2>
+                        
+                        <!-- Conversation History -->
+                        <div class="flex-grow overflow-y-auto mb-4 space-y-4">
+                            <div class="ai-message conversation-message">
+                                <p>Hello! I'm your PurrFect AI trading assistant. How can I help you today?</p>
+                            </div>
+                            
+                            <div class="user-message conversation-message">
+                                <p>What's the current status of my portfolio?</p>
+                            </div>
+                            
+                            <div class="ai-message conversation-message">
+                                <p>Your portfolio is currently valued at $12,450.32, up 2.4% today. You have 3 active positions in DOGE, SHIB, and FLOKI. Your P&L for today is +$245.18 from 5 trades.</p>
+                            </div>
+                            
+                            <div class="user-message conversation-message">
+                                <p>I want to be more aggressive with DOGE</p>
+                            </div>
+                            
+                            <div class="ai-message conversation-message">
+                                <p>I'll be more aggressive with DOGE trades now. I've updated your risk parameters for DOGE to allow for larger position sizes and more frequent entries. Would you like me to look for new entry opportunities right away?</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Input Area -->
+                        <div class="border-t pt-4">
+                            <div class="relative">
+                                <input type="text" placeholder="Type your message..." class="w-full border rounded-full py-3 px-4 pr-12 focus:outline-none focus:ring-2 focus:ring-primary">
+                                <button class="absolute right-2 top-2 bg-primary text-white p-2 rounded-full">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Simple tab switching functionality
+        document.querySelectorAll('[id^="tab-"]').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                document.querySelectorAll('[id^="tab-"]').forEach(t => {
+                    t.classList.remove('tab-active');
+                    t.classList.add('tab-inactive');
+                });
+                
+                // Add active class to clicked tab
+                tab.classList.remove('tab-inactive');
+                tab.classList.add('tab-active');
+                
+                // Update content based on tab (in a real app, this would show/hide different panels)
+                const tabId = tab.id.replace('tab-', '');
+                document.querySelector('#workspace-panel h2').textContent = 
+                    tabId === 'main' ? 'Dashboard' : 
+                    tabId === 'market' ? 'Market Analysis' : 
+                    tabId === 'trade' ? 'Trading Interface' : 'Configuration';
+            });
+        });
+    </script>
+</body>
+</html> 
